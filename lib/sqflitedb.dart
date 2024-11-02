@@ -27,14 +27,46 @@ class SqlDb {
     print("onUpgrade =====================================");
   }
 
+// اضافه للجدول صفوف مع المحافظه على بياناته السابقه
+//   _onUpgrade(Database db, int oldversion, int newversion) async {
+//     if (oldversion < 5) { // assuming version 5 adds the color column
+//       await db.execute('ALTER TABLE notes ADD COLUMN color TEXT');
+//       print("onUpgrade =====================================");
+//     }
+//   }
+
+
   _onCreate(Database db, int version) async {
     await db.execute('''
   CREATE TABLE "notes" (
     "id" INTEGER  NOT NULL PRIMARY KEY  AUTOINCREMENT, 
-    "note" TEXT NOT NULL
+    "title" TEXT NOT NULL,
+    "note" TEXT NOT NULL,
+    "color" TEXT
   )
  ''');
     print(" onCreate =====================================");
+
+    // اضافة اكثر من جدول
+ //    Batch batch = db.batch();
+ //    batch.execute('''
+ //  CREATE TABLE "notes" (
+ //    "id" INTEGER  NOT NULL PRIMARY KEY  AUTOINCREMENT,
+ //    "title" TEXT NOT NULL,
+ //    "note" TEXT NOT NULL,
+ //    "color" TEXT
+ //  )
+ // ''');
+ //    batch.execute('''
+ //  CREATE TABLE "students" (
+ //    "id" INTEGER  NOT NULL PRIMARY KEY  AUTOINCREMENT,
+ //    "title" TEXT NOT NULL,
+ //    "note" TEXT NOT NULL,
+ //    "color" TEXT
+ //  )
+ // ''');
+ //   await batch.commit();
+
   }
 
   readData(String sql) async {
@@ -61,6 +93,12 @@ class SqlDb {
     return response;
   }
 
+
+  myDeleteDatabase() async {
+    String databasepath = await getDatabasesPath();
+    String path = join(databasepath, 'ahmed.db');
+    await deleteDatabase(path);
+  }
 // SELECT
 // DELETE
 // UPDATE

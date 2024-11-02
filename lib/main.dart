@@ -1,3 +1,4 @@
+import 'package:appnews/addnotes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appnews/home.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       home: Home(),
+      routes: {"addnotes": (context) => AddNotes()},
     );
   }
 }
