@@ -1,3 +1,4 @@
+import 'package:appnews/editnotes.dart';
 import 'package:appnews/sqflitedb.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,25 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   SqlDb aqlDb = SqlDb();
+  bool isLoading = true ;
+  List notes = [];
 
   Future<List<Map>> readData() async{
     List<Map> response = await aqlDb.readData("SELECT * FROM notes");
+    notes.addAll(response);
+    isLoading = false;
+    if (this.mounted) {
+      setState(() {
+
+      });
+    }
     return response;
+  }
+
+  @override
+  void initState() {
+    readData();
+    super.initState();
   }
 
   @override
@@ -36,33 +52,50 @@ class _HomeState extends State<Home> {
             // },
             // child: Text("delete database"),
             // ),
-            FutureBuilder(
-                future: readData(),
-                builder: (BuildContext context ,AsyncSnapshot<List<Map>> snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
+         ListView.builder(
+                  itemCount: notes.length,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, i) {
                       return Card(
                         child: ListTile(
-                          title: Text("${snapshot.data![i]['title']}"),
-                          subtitle: Text("${snapshot.data![i]['note']}"),
-                          trailing: IconButton(onPressed: () async {
-                                 int response = await aqlDb.deleteData("DELETE FROM notes WHERE id = ${snapshot.data![i]['id']}");
-                                 if ( response > 0) {
-                                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
-                                 }
-                          },
-                            icon: Icon(Icons.delete,color: Colors.red,),
-                          ),
+                          title: Text("${notes[i]['title']}"),
+                          subtitle: Text("${notes[i]['note']}"),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+                                int response = await aqlDb.deleteData("DELETE FROM notes WHERE id = ${notes[i]['id']}");
+                                if ( response > 0) {
+                                  notes.removeWhere((element) => element['id'] == notes[i]['id']);
+                                  setState(() {
+
+                                  });
+                                }
+                              },
+                                icon: Icon(Icons.delete,color: Colors.red,),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                               Navigator.of(context).push(
+                                 MaterialPageRoute(builder: (context) => EditNotes(
+                                   color: notes[i]['color'],
+                                   note: notes[i]['note'],
+                                   title: notes[i]['title'],
+                                   id: notes[i]['id'],
+                                 ))
+                               );
+                                },
+                                icon: Icon(Icons.edit,color: Colors.blue,),
+                              ),
+                            ],
+                          )
                         ),
                       );
-                    });
-              }
-              return Center(child: CircularProgressIndicator(),);
-            })
+                    }),
+
+
           ],
         )
 
