@@ -54,11 +54,15 @@ SqlDb sqlDb = SqlDb();
                     textColor: Colors.white,
                     color: Colors.red,
                     onPressed: () async{
-                 int response = await sqlDb.insertData(
-                     '''
-                     INSERT INTO notes (`note`, `title`, `color`)
-                     VALUES ("${note.text}","${title.text}","${color.text}")
-                     ''');
+                 // int response = await sqlDb.insertData('''
+                 //     INSERT INTO notes (`note`, `title`, `color`)
+                 //     VALUES ("${note.text}","${title.text}","${color.text}")
+                 //     ''');
+                      int response = await sqlDb.insert("notes", {
+                        "note":"${note.text}",
+                        "title":"${title.text}",
+                        "color":"${color.text}"
+                      });
                      if (response > 0) {
                        Navigator.of(context).pushAndRemoveUntil(
                            MaterialPageRoute(builder: (context) => Home()),

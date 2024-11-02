@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
   List notes = [];
 
   Future<List<Map>> readData() async{
-    List<Map> response = await aqlDb.readData("SELECT * FROM notes");
+    List<Map> response = await aqlDb.read("notes");
     notes.addAll(response);
     isLoading = false;
     if (this.mounted) {
@@ -47,11 +47,11 @@ class _HomeState extends State<Home> {
       body: Container(
         child: ListView(
           children: [
-            // MaterialButton(onPressed: () async{
-            //   await aqlDb.myDeleteDatabase();
-            // },
-            // child: Text("delete database"),
-            // ),
+            MaterialButton(onPressed: () async{
+              await aqlDb.myDeleteDatabase();
+            },
+            child: Text("delete database"),
+            ),
          ListView.builder(
                   itemCount: notes.length,
                     physics: NeverScrollableScrollPhysics(),
@@ -66,7 +66,8 @@ class _HomeState extends State<Home> {
                             children: [
                               IconButton(
                                 onPressed: () async {
-                                int response = await aqlDb.deleteData("DELETE FROM notes WHERE id = ${notes[i]['id']}");
+                                // int response = await aqlDb.deleteData("DELETE FROM notes WHERE id = ${notes[i]['id']}");
+                                  int response = await aqlDb.delete("notes","id = ${notes[i]['id']}");
                                 if ( response > 0) {
                                   notes.removeWhere((element) => element['id'] == notes[i]['id']);
                                   setState(() {
