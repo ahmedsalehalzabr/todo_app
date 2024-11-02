@@ -25,8 +25,8 @@ class _HomeState extends State<Home> {
                 color: Colors.red,
                 textColor: Colors.white,
                 onPressed: () async {
-                  int response = await aqlDb.insertData("INSERT INTO 'notes' ('note') VALUES ('note one')" );
-                   print(response);
+                  int response = await aqlDb.insertData("INSERT INTO 'notes' ('note') VALUES ('note fore')" );
+                   print("$response");
                 },
                 child: Text("Insert Data"),
               ),
@@ -37,9 +37,31 @@ class _HomeState extends State<Home> {
                 textColor: Colors.white,
                 onPressed: () async{
                   List<Map> response = await aqlDb.readData("SELECT * FROM 'notes'" );
-                  print(response);
+                  print("$response");
                 },
                 child: Text("Read Data"),
+              ),
+            ),
+            Center(
+              child: MaterialButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                onPressed: () async{
+                  int response = await aqlDb.deleteData("DELETE FROM 'notes' WHERE id = 5 " );
+                  print("$response");
+                },
+                child: Text("Delete Data"),
+              ),
+            ),
+            Center(
+              child: MaterialButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                onPressed: () async{
+                  int response = await aqlDb.updateData("UPDATE 'notes' SET 'note' = 'note six' WHERE id = 6 " );
+                  print("$response");
+                },
+                child: Text("Update Data"),
               ),
             )
           ],

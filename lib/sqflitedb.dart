@@ -17,10 +17,9 @@ class SqlDb {
 
   intialDb() async {
     String databasepath = await getDatabasesPath();
-   // var databasepath = await getDatabasesPath();
     String path = join(databasepath, 'ahmed.db');
     Database mydb = await openDatabase(path,
-        onCreate: _onCreate, version: 3, onUpgrade: _onUpgrade);
+        onCreate: _onCreate, version: 5, onUpgrade: _onUpgrade);
     return mydb;
   }
 
