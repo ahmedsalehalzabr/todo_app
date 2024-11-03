@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("HomePage"),
+        title: const Text("Todo App"),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -47,11 +47,16 @@ class _HomeState extends State<Home> {
       body: Container(
         child: ListView(
           children: [
-            MaterialButton(onPressed: () async{
-              await aqlDb.myDeleteDatabase();
-            },
-            child: Text("delete database"),
-            ),
+                Center(
+                  child: MaterialButton(
+                    color: Colors.red,
+                    textColor: Colors.white,
+                    onPressed: () async {
+                      await aqlDb.myDeleteDatabase();
+                    },
+                    child: Text("Delete Database"),
+                  ),
+                ),
          ListView.builder(
                   itemCount: notes.length,
                     physics: NeverScrollableScrollPhysics(),
@@ -95,8 +100,6 @@ class _HomeState extends State<Home> {
                         ),
                       );
                     }),
-
-
           ],
         )
 
